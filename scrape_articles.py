@@ -24,17 +24,14 @@ def scrape_article(url):
 
         soup = BeautifulSoup(r.text, "html.parser")
 
-        # TITRE
         h1 = soup.find("h1")
         titre = h1.get_text(strip=True) if h1 else ""
 
-        # DATE
         date = ""
         time_tag = soup.find("time")
         if time_tag:
             date = time_tag.get("datetime", "").strip()
 
-        # CONTENU
         content = ""
         for selector in [
             "div.article-content",
@@ -65,7 +62,6 @@ def main():
 
     df = pd.read_csv(INPUT_CSV)
 
-    # Colonnes si absentes
     for col in ["Titre_final", "Date", "Contenu"]:
         if col not in df.columns:
             df[col] = ""
@@ -75,7 +71,7 @@ def main():
 
     for i, row in df.iterrows():
         if pd.notna(row["Contenu"]) and row["Contenu"].strip():
-            continue  # déjà fait
+            continue  
 
         url = row["URL"]
         print(f"{i+1}/{total} → {url}")
@@ -89,7 +85,6 @@ def main():
         else:
             print("   Échec")
 
-        # sauvegarde progressive
         df.to_csv(OUTPUT_CSV, index=False, encoding="utf-8-sig")
 
         pause = random.uniform(DELAI_MIN, DELAI_MAX)
