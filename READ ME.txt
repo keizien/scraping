@@ -1,0 +1,140 @@
+Projet : Compta Fiscal – Articles Scraper
+Scraper Python permettant d’extraire l’ensemble des articles du site
+https://compta.webwin.be
+afin de les réimporter automatiquement dans WordPress.
+
+🎯 Objectif du projet
+Récupérer tous les articles du site (≈ 1300+)
+Extraire :
+- Titre
+- URL
+- Date de publication
+- Contenu HTML
+- Générer un CSV exploitable
+- Permettre une reprise automatique en cas d’arrêt
+- Éviter tout blocage serveur (scraping “safe”)
+
+⚙️ Fonctionnalités
+- Extraction complète des articles (toutes catégories confondues)
+- Scraping page par page via URLs réelles (pas de JS fragile)
+- Scraping du contenu article par article
+- Sauvegarde progressive (reprise possible)
+- Pauses aléatoires pour simuler un comportement humain
+- Export CSV compatible import WordPress
+- Logs clairs (progression, erreurs, reprise)
+
+
+Choix techniques (important pour le jury / tuteur)
+Pourquoi pas Selenium ?
+- Trop lent
+- Trop instable
+- Surconsommation de ressources
+- Inutile une fois les URLs connues
+
+
+Selenium a servi uniquement à comprendre la structure du site.
+Stack finale
+- requests → requêtes HTTP
+- BeautifulSoup → parsing HTML
+- pandas → CSV final
+- time / random → anti-blocage
+- Scraping séquentiel volontairement lent
+
+
+Prérequis
+- Python 3.9+
+- Pip
+
+
+Installation
+git clone <repo>
+cd scrap-compta-fiscal
+python -m venv .venv
+
+
+Activation de l’environnement
+Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+Windows (CMD)
+.venv\Scripts\activate.bat
+
+Linux / macOS
+source .venv/bin/activate
+
+Dépendances
+pip install -r requirements.txt
+
+Utilisation
+Étape 1 – Récupération de toutes les URLs
+python selenium_test.py
+
+Génère :
+tous_les_articles.csv
+
+Colonnes :
+- titre
+- url
+
+
+Étape 2 – Scraping du contenu des articles
+python scrape_content.py
+
+Fonctionnement :
+- Lit tous_les_articles.csv
+- Ignore automatiquement les articles déjà traités
+- Peut être arrêté / relancé sans perte
+- Sauvegarde progressive
+
+
+Structure du projet
+scrap-compta-fiscal/
+│
+├── data/
+│   ├── tous_les_articles.csv
+│   ├── articles_complets.csv
+│
+├── scrape_list.py
+├── scrape_content.py
+├── requirements.txt
+├── README.md
+└── .venv/
+
+
+Résultats
+- 1375 articles récupérés
+- Temps total :
+- Liste : quelques minutes
+- Contenu : plus long (scraping sécurisé)
+- Taux d’erreur : très faible
+- Aucun blocage serveur constaté
+
+
+Import dans WordPress
+
+Méthodes possibles :
+Recommandée
+- WP All Import
+- Mapping :
+	Titre → post_title
+	Contenu HTML → post_content
+	Date → post_date
+	Catégories → taxonomies
+
+Alternatives
+- WordPress REST API
+- WP-CLI
+
+
+Limitations connues
+- Scraping volontairement lent (anti-bot)
+- Pas de multi-threading agressif
+- Dépendant de la structure HTML actuelle du site
+
+
+Conclusion
+- Ce projet met en œuvre :
+- une vraie méthodologie de scraping
+- une approche robuste et responsable
+- une séparation claire des étapes
+- une solution directement exploitable en production WordPress
