@@ -8,7 +8,6 @@ def nettoyer_titre(titre_brut):
     # Décode les entités HTML
     titre = html.unescape(str(titre_brut))
     
-    # Parse le HTML si nécessaire
     soup = BeautifulSoup(titre, 'html.parser')
     titre = soup.get_text()
     

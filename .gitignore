@@ -1,0 +1,19 @@
+# Data files
+*.csv
+*.json
+*.xlsx
+*.txt
+# Allow Readme files
+!README.md
+!README.txt
+!"READ ME.txt"
+
+# Python cache and environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+.env
+venv/
+.venv/
+env/
